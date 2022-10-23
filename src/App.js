@@ -7,39 +7,55 @@ var emojiDictionary = {
   "❤️": "love",
   "🦊": "Fox",
   "🐱": "cat",
-  "🦅": "eagle"
+  "🦅": "eagle",
+  "😔": "sad",
+  "🥡": "takeout box",
+  "🤖": "Robot",
+  "💚": "Green Heart",
+  "🕵️": "Detective"
 };
 
 var emojisWeKnow = Object.keys(emojiDictionary);
 
 export default function App() {
-  var [meaning, setMeaning] = useState("");
+  const [emoji, setEmoji] = useState("");
+  const [meaning, setMeaning] = useState("translation will appear here");
 
   function emojiInputHandler(event) {
-    var emoji = event.target.value;
-    meaning = emojiDictionary[emoji];
-    if (meaning === undefined) {
-      meaning = "We don't have that in our database";
+    const inputEmoji = event.target.value;
+    setEmoji(inputEmoji);
+    if (inputEmoji in emojiDictionary) {
+      setMeaning(emojiDictionary[inputEmoji]);
+    } else {
+      setMeaning("Failure to recognise this emoji");
     }
-    setMeaning(meaning);
   }
 
-  function emojiClickHandler(emoji) {
-    meaning = emojiDictionary[emoji];
-    setMeaning(meaning);
+  function emojiClickHandler(inputEmoji) {
+    setMeaning(emojiDictionary[inputEmoji]);
   }
   return (
     <div className="App">
       <h1>Emoji Interpreter</h1>
-      <input onChange={emojiInputHandler}></input>
-      <p style={{ fontSize: "2rem" }}>{meaning}</p>
+      <input
+        onChange={emojiInputHandler}
+        value={emoji}
+        placeholder={"Search your emoji"}
+        style={{
+          padding: "1em",
+          minWidth: "80%"
+        }}
+      />
+      <h2> {emoji} </h2> {/** Concept 1: JSX */}
+      <h3> {meaning} </h3> {/** how much part is re-rendered. */}
       {emojisWeKnow.map((emoji) => {
         return (
           <span
             style={{ fontSize: "2rem", padding: "1rem", cursor: "pointer" }}
             onClick={() => emojiClickHandler(emoji)}
           >
-            {emoji}
+            {" "}
+            {emoji}{" "}
           </span>
         );
       })}
